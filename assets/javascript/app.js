@@ -25,12 +25,18 @@ $("#add-train-btn").on("click", function () {
    var firstArrival = $("#first-train-input").val().trim();
    var freqInput = $("#frequency-input").val().trim();
 
+   console.log(firstArrival)
+   console.log(freqInput)
+
+
    var newTrain = {
        name: trainName,
        destination: destName,
        arrival: firstArrival,
        frequency: freqInput,
    };
+
+
 
    trainData.ref().push(newTrain);
 
@@ -57,32 +63,39 @@ trainData.ref().on("child_added", function (childSnapshot) {
       var tName = childSnapshot.val().name;
       var tDest = childSnapshot.val().destination;
       var tFrequency = childSnapshot.val().frequency;
-      var tFirstTrain = childSnapshot.val().firstArrival;
+      var tFirstTrain = childSnapshot.val().arrival;
+
+      console.log(tFrequency);
 
    // console.log(nameTrain);
    // console.log(trainDest);
    // console.log(trainArrive);
    // console.log(trainFreq);
+   
+   
 
-   var trainFrequency = 15;
-   var firstTrain = "6:15";
+   // var trainFrequency = tFrequency;
+   // var firstTrain ='"' + tFirstTrain + '"';
 
-   var firstTimeConverted = moment(firstTrain, "HH:mm").subtract(1, "years");
+   // console.log(trainFrequency);
+   // console.log(firstTrain);
+
+   var firstTimeConverted = moment(tFirstTrain, "HH:mm").subtract(1, "years");
    console.log(firstTimeConverted);
 
    var currentTime = moment();
    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
 
-   var diffTime = moment().diff(moment(firstTimeConverted), "mintues");
+   var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
    console.log("DIFFERENCE IN TIME: " + diffTime);
 
-   var timeRemain = diffTime % trainFrequency;
+   var timeRemain = diffTime % tFrequency;
    console.log(timeRemain);
 
-   var mintuesTillTrain = trainFrequency - timeRemain;
+   var mintuesTillTrain = tFrequency - timeRemain;
    console.log("MINTUES TILL TRAIN: " + mintuesTillTrain);
 
-   var nextTrain = moment().add(mintuesTillTrain, "mintues");
+   var nextTrain = moment().add(mintuesTillTrain, "minutes").format("hh:mm");
    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
 
    // var newRow = $("<tr>").append(
